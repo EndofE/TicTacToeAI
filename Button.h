@@ -19,11 +19,8 @@ public:
     Button(float x, float y, float w, float h, std::string text, bool hovered, bool isPressed) : x(x), y(y), w(w), h(h), text(text), hovered(hovered), isPressed(isPressed) {}
 
     void draw() {
-
         if(isPressed) {
-            glColor3f(0.6f, 0.2f, 0.2f); //clicked
-        } else if(hovered) {
-            glColor3f(0.8f, 0.8f, 0.8f); //hovered over
+            glColor3f(0.4f, 0.56f, 0.41f); //clicked
         } else {
             glColor3f(0.2f, 0.36f, 0.21f); //default
         }
@@ -50,12 +47,15 @@ public:
         drawText(x, y, text);
     }
 
-    void setHover(bool hovered) { this->hovered = hovered; }
+    void draw2() {
+        drawText(x, y, text);
+    }
+
 
     void setPressed(bool isPressed) { this->isPressed = isPressed; }
 
     bool isClicked(float mx, float my) {
-        std::cout<<"Button is clicked"<<std::endl;
+        // std::cout<<"Button is clicked"<<std::endl;
         float l = x - w / 2;
         float r = x + w / 2;
         float b = y - h / 2;
@@ -63,8 +63,8 @@ public:
         return mx > l && mx < r && my > b && my < t;
     }
 
-    void drawText(float x, float y, const std::string& text) {
-        glColor3f(1.0f, 1.0f, 1.0f);
+    static void drawText(float x, float y, const std::string& text) {
+        glColor3f(1.0f, 1.0f, 1.0f); //white text
 
         // //find width of text
         int textWidth = 0;

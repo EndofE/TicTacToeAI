@@ -6,21 +6,26 @@
 #include "AppController.h"
 #include "Game.h"
 #include "StartScreen.h"
+#include "EndScreen.h"
 
 class Controller : public AppController{
     Game game;
     StartScreen start;
+    EndScreen end;
 
     bool gameStarted;
+    bool gameEnded;
 
 public:
     Controller() : gameStarted(false) {}
 
     void render() {
-        if(!gameStarted) {
+        if(!gameStarted && !gameEnded) {
             start.draw();
-        } else {
-            game.gameScreen();
+        } else if(gameStarted && !gameEnded){
+            game.draw();
+        } else if(!gameStarted && gameEnded) {
+            end.draw();
         }
     }
 
@@ -48,6 +53,7 @@ public:
             }
         } else {
             game.handleMouseClick(button, state, x, y);
+            
         }
     }
     

@@ -1,3 +1,4 @@
+
 #ifndef GAME_H
 #define GAME_H
 
@@ -44,7 +45,7 @@ public:
 
         //game screen buttons
         home = Button(-0.9f, 0.95f, 0.2f, 0.15f, "Home", false, false);
-        reset = Button(0.9f, 0.95f, 0.2f, 0.15f, "Retry", false, false); 
+        reset = Button(0.9f, 0.95f, 0.2f, 0.15f, "Reset", false, false); 
     }
 
     void drawingBoard() {
@@ -136,6 +137,12 @@ public:
         float normX = (2.0f * (x / glutGet(GLUT_WINDOW_WIDTH))) - 1.0f;
         float normY = 1.0f - (2.0f * (y / glutGet(GLUT_WINDOW_HEIGHT)));
         
+        if(button == 0 && state == 0){
+            if(reset.isClicked(normX, normY)){
+                resetGame();
+                return;
+            }
+        }
         if(button == 0 && state == 0) {
             //determine square clicked
             int row = static_cast<int>((1.0f - normY) * size / 2);
@@ -278,6 +285,7 @@ public:
         board.clear();
         board.resize(size, std::vector<int>(size, 0));
         drawingBoard();
+
     }
 
  void easyAI() {
