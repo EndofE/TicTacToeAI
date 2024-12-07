@@ -27,57 +27,20 @@ class Game{
 
 private:
     bool playerX, gameOver;
-    bool easyAIsetting, mediumAIsetting, hardAIsetting;
-    bool showAiScreen;
     Button home;
     Button reset;
     int size;
     std::vector<std::vector<int>> board;
-    bool showStart, showEnd, showGame, ignoreClick;
-
-
-    Button titleButton;
-    Button startButton;
-    Button easyAiButton;
-    Button mediumAiButton;
-    Button hardAiButton;
-    Button AiButton;
-    Button humanButton;
-    Button threeButton;
-    Button fourButton;
-    Button fiveButton; 
-    Button start;
-    Button opp;
-    Button bs;
+    bool showEnd;
+    bool easy, medium, hard;
 
 public:
     Game(){
         playerX = true;
-        easyAIsetting = false;
-        mediumAIsetting = false;
-        hardAIsetting = false;
         size=3;
-        showStart = true;
-        showAiScreen = false; 
         showEnd = false;
-        showGame = false;
-        ignoreClick = true;
+        gameOver = false;
         board.resize(size, std::vector<int>(size,0));
-        
-        //start screen buttons
-        titleButton = Button(0.0f, 0.60f, 1.00f, 0.2f, "Tic-Tac-Toe", false, false);
-        startButton = Button(0.0f, -0.6f, 0.50f, 0.2f, "START", false, false);
-        humanButton = Button(-0.25f, 0.2f, 0.25f, 0.2f, "1v1", false, false);
-        easyAiButton = Button(0.05f, 0.2f, 0.35f, 0.2f, "Easy", false, false);
-        mediumAiButton = Button(0.4f, 0.2f, 0.35f, 0.2f, "Med", false, false);
-        hardAiButton = Button(0.75f, 0.2f, 0.35f, 0.2f, "Hard", false, false);
-        opp = Button(-0.7f, 0.17f, 0.35f, 0.2f, "Opponent:", false, false);
-        bs = Button(-0.7f, -0.23f, 0.35f, 0.2f, "Board Size:", false, false);
-
-        //gameboard size buttons
-        threeButton = Button(-0.2f, -0.2f, 0.35f, 0.2f, "3 x 3", false, false);
-        fourButton = Button(0.15f, -0.2f, 0.35f, 0.2f, "4 x 4", false, false);
-        fiveButton = Button(0.5f, -0.2f, 0.35f, 0.2f, "5 x 5", false, false);
 
         //game screen buttons
         home = Button(-0.9f, 0.95f, 0.2f, 0.15f, "Home", false, false);
@@ -99,7 +62,7 @@ public:
                 glVertex2f(position,1.0f);
                 //horizontal lines
                 glVertex2f(-1.0, position);
-                glVertex2f(1.0f ,position);
+                glVertex2f(1.0f, position);
             }
         glEnd();
 
@@ -139,48 +102,23 @@ public:
         glutSwapBuffers();
     }
 
-    void setStart(){
-        showStart = true;
-        showGame = false;
-        showEnd = false;
-        showAiScreen = false;
+    void unsetButtons() {
+        easy = false;
+        medium = false;
+        hard = false;
     }
 
-    void setAiScreen(){
-        showStart = false; 
-        showAiScreen = true;
-        showGame = false; 
-        showEnd = false;
+    void setEasyAI(bool set) { 
+        unsetButtons();
+        easy = set; 
     }
-    void setGame() {
-        showStart = false;
-        showGame = true;
-        showEnd = false;
-        showAiScreen = false;
-        ignoreClick = true;
+    void setMediumAI(bool set) { 
+        unsetButtons();
+        medium = set;
     }
-
-    void setEnd() {
-        showStart = false;
-        showGame = false;
-        showEnd = true;
-    }
-
-    void startScreen() {
-        glClearColor(0.4f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        threeButton.draw(); 
-        fourButton.draw(); 
-        fiveButton.draw(); 
-        titleButton.draw(); 
-        startButton.draw(); 
-        humanButton.draw(); 
-        easyAiButton.draw();
-        mediumAiButton.draw();
-        hardAiButton.draw();
-        opp.draw2();
-        bs.draw2();
+    void setHardAI(bool set) { 
+        unsetButtons();
+        hard = set;
     }
 
     void gameScreen() {
@@ -189,121 +127,70 @@ public:
         reset.draw();
     }
 
-    void endScreen() {
-        glClearColor(0.75f, 0.75f, 0.75f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        if(isDraw()) {
-
-        } else if(checkWin(playerX)) {
-
-        }
-    }
-
-    void updateState() {
-        if(showStart) startScreen();
-        else if (showGame) gameScreen();
-        else if (showEnd) endScreen();
-        glutSwapBuffers();
-    }
 
     void handleMouseClick(int button, int state, float x, float y) {
         if(showEnd) {
             return;
         }
-
         //converts mouse coords to normal coords
         float normX = (2.0f * (x / glutGet(GLUT_WINDOW_WIDTH))) - 1.0f;
         float normY = 1.0f - (2.0f * (y / glutGet(GLUT_WINDOW_HEIGHT)));
         
-        if(state == 0) {
-            if(threeButton.isClicked(normX, normY)) {
-                resizeBoard(3);
-                // setGame();
-            } else if(fourButton.isClicked(normX, normY)) {
-                resizeBoard(4);
-            } else if(fiveButton.isClicked(normX, normY)) {
-                resizeBoard(5);
-            }
-
-            if(easyAiButton.isClicked(normX, normY)){
-                easyAIsetting = true;
-                setGame();
-            }else if (humanButton.isClicked(normX, normY)){
-                setGame();
-            }else if(mediumAiButton.isClicked(normX, normY)){
-                mediumAIsetting = true;
-                setGame();
-            }else if (hardAiButton.isClicked(normX, normY)){
-                hardAIsetting = true;
-                setGame();
-            }
-
-            if(showStart) {
-                if(startButton.isClicked(normX, normY)) {
-                    std::cout << "Start Button Clicked!" << std::endl;
-                    setGame();
-                }
-            } 
-        }
         if(button == 0 && state == 0) {
-                if(showGame) {
-                    if(ignoreClick) {
-                        ignoreClick = false;
+            //determine square clicked
+            int row = static_cast<int>((1.0f - normY) * size / 2);
+            int col = static_cast<int>((normX + 1.0f) * size / 2);
+
+            //make sure click is within bounds
+            if (row >= 0 && row < size && col >= 0 && col < size) {
+                //make sure cell is empty
+                if(board[row][col] == 0) { //if cell is empty
+                    board[row][col] = playerX ? 1 : 2;
+                    // std:: cout << playerX;
+                    playerX = !playerX; 
+                    drawingBoard();
+
+                    if(checkWin(playerX ? 2 : 1)) {
+                        showEnd = true;
+                        gameOver = true;
                         return;
                     }
-                //determine square clicked
-                int row = static_cast<int>((1.0f - normY) * size / 2);
-                int col = static_cast<int>((normX + 1.0f) * size / 2);
+                    if(isDraw()) {
+                        showEnd = true;
+                        gameOver = true;
+                        std::cout<<"It's a draw!"<<std::endl;
+                        return;
+                    }
 
-                //make sure click is within bounds
-                if (row >= 0 && row < size && col >= 0 && col < size) {
-                    //make sure cell is empty
-                    if(board[row][col] == 0) { //if cell is empty
-                        board[row][col] = playerX ? 1 : 2;
-                        // std:: cout << playerX;
-                        playerX = !playerX; 
+                    if(!playerX){
+                        if(easy){
+                            easyAI();
+                            std::cout<<"Changing to easy AI"<<std::endl;
+                        } else if(medium){
+                            mediumAI();
+                            std::cout<<"Changing to medium AI"<<std::endl;
+                        } else if (hard){
+                            hardAI();
+                            std::cout<<"Changing to hard AI"<<std::endl;
+                        }
+
                         drawingBoard();
-
                         if(checkWin(playerX ? 2 : 1)) {
                             showEnd = true;
+                            gameOver = true;
                             return;
                         }
                         if(isDraw()) {
                             showEnd = true;
-                            std::cout<<"It's a draw!"<<std::endl;
+                            gameOver = true;
+                            std::cout << "It's a draw" << std::endl;
                             return;
                         }
-
-                        if(!playerX){
-                            if(easyAIsetting){
-                                easyAI();
-                            } else if(mediumAIsetting){
-                                mediumAI();
-                            } else if (hardAIsetting){
-                                hardAI();
-                            }
-
-                            drawingBoard();
-                            if(checkWin(playerX ? 2 : 1)) {
-                                showEnd = true;
-                                return;
-                            }
-                            if(isDraw()) {
-                                showEnd = true;
-                                std::cout << "It's a draw" << std::endl;
-                                return;
-                            }
-                            
-                        }
+                        
                     }
-                }  
-            } 
-            else if(showEnd) {
-            //     if(normX > -0.5 && normX < 0.5f && normY > 0.0f && normY < 0.3f) {
-            //         resetGame();
-            //     }
+                }
             }  
-        glutPostRedisplay();
+            glutPostRedisplay();
         }
     }
 
@@ -386,10 +273,8 @@ public:
 
     void resetGame() {
         playerX = true;
+        showEnd = false;
         gameOver = false;
-        easyAIsetting = false;
-        mediumAIsetting = false;
-        hardAIsetting = false;
         board.clear();
         board.resize(size, std::vector<int>(size, 0));
         drawingBoard();
@@ -411,7 +296,7 @@ public:
 
 
  void mediumAI() {
-    if (!playerX && mediumAIsetting && !gameOver) { 
+    if (!playerX && !gameOver) { 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (board[i][j] == 0) { 
