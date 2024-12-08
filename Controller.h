@@ -13,11 +13,11 @@ class Controller : public AppController{
     StartScreen start;
     EndScreen end;
 
-    bool gameStarted;
-    bool gameEnded;
+    bool gameStarted = false;
+    bool gameEnded = false;
 
 public:
-    Controller() : gameStarted(false) {}
+    Controller() : gameStarted(false), game(), end(&game) {}
 
     void render() {
         if(!gameStarted && !gameEnded) {
@@ -30,7 +30,7 @@ public:
     }
 
     void leftMouseDown(int button, int state, float x, float y) {
-        if(!gameStarted) {
+        if(!gameStarted && !gameEnded) {
             start.handleMouseClick(button, state, x, y);
             if(start.startGame()) {
                 if(start.threeSelected()) {
@@ -47,13 +47,30 @@ public:
                     game.setMediumAI(true);
                 } else if(start.isHardSelected()) {
                     game.setHardAI(true);
+                }else if(start.noAi()) {
+                    game.setNoAi(true);
                 }
                 gameStarted = true;
                 game.resetGame();
             }
-        } else {
+        } else if(gameStarted && !gameEnded){
             game.handleMouseClick(button, state, x, y);
-            
+            if(game.gameDone()) {
+                gameEnded = true;
+                gameStarted = false;
+            }
+        } else if(!gameStarted && gameEnded) {
+            end.handleMouseClick(button, state, x, y);
+            if(end.homeSelected()) {
+                gameEnded = false;
+                gameStarted = false;
+                game.resetGame();
+                start.reset();
+            } else if(end.resetSelected()) {
+                gameStarted = true;
+                gameEnded = false;
+                game.resetGame();
+            }
         }
     }
     

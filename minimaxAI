@@ -1,0 +1,69 @@
+int minimax (std::vector<std::vector<int>>& board, int depth, bool maximizing){
+        if (checkWin(2)) return 10 - depth;
+        if (checkWin(1)) return depth - 10;
+        if (isDraw()) return 0;
+        //maximizing your score (picking what runs as the best reward move)
+        if (maximizing) {
+            int best = -1000;
+            for (int i = 0; i < size; ++i) {
+                for (int j = 0; j < size; ++j) {
+                    if (board[i][j] == 0) {
+                        board[i][j] = 2;
+                        best = std::max(best, minimax(board, depth + 1, false));
+                        board[i][j] = 0;
+                    }
+                }
+            }
+            return best;
+        }
+
+        //minimizes opponent score (so ai can assume the player picked the best possible move)
+        else {
+            int best = 1000;
+            for (int i = 0; i < size; ++i) {
+                for (int j = 0; j < size; ++j) {
+                    if (board[i][j] == 0) {
+                        board[i][j] = 1;
+                        best = std::min(best, minimax(board, depth + 1, true));
+                        board[i][j] = 0;
+                    }
+                }
+            }
+            return best;
+        }
+    }
+
+    void hardAI(){
+        if(!playerX && !gameOver){
+            int highestValue = -1000;
+            int bestRow = -1;
+            int bestColumn = -1;
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    if (board[i][j] == 0) {  
+                        board[i][j] = 2;
+                        int moveVal = minimax(board, 0, false);  
+                        board[i][j] = 0; 
+                        if (moveVal > highestValue) {
+                            bestRow = i;
+                            bestColumn = j;
+                            highestValue = moveVal;
+                        }
+                    }
+                }
+            }   
+            board[bestRow][bestColumn] = 2;  
+            playerX = true;  
+            drawingBoard();
+
+            if (checkWin(2)) {  
+                showEnd = true;
+                return;
+            }
+            if (isDraw()) {  
+                showEnd = true;
+                std::cout << "It's a draw" << std::endl;
+                return;
+            }
+        }
+    }

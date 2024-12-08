@@ -4,19 +4,6 @@
 #include "LinkedList.h"
 
 using namespace std;
-Expand
-message.txt
-6 KB
-welp thats my entire main.cpp
-cardboard — Today at 2:27 PM
-thank youuuuu
-﻿
-#include <iostream>
-#include "GameState.h"
-#include "Graph.h"
-#include "LinkedList.h"
-
-using namespace std;
 
 // from lecture 19
 int maxReward(Vertex<GameState>* node, int player){

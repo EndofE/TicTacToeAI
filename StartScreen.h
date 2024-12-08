@@ -21,7 +21,7 @@ private:
     Button opp;
     Button bs;
 
-    bool easy, medium, hard;
+    bool easy, medium, hard, none;
     bool three, four, five;
     bool game;
 
@@ -30,6 +30,7 @@ public:
         easy = false;
         medium = false;
         hard = false;
+        none = false;
         game = false;
 
         //start screen buttons
@@ -68,9 +69,16 @@ public:
         fiveButton.setPressed(false);
     }
 
+    void resetBoardSelec() {
+        three = false;
+        four = false;
+        five = false;
+    }
+
     bool isEasySelected() const { return easy; }
     bool isMediumSelected() const { return medium; }
     bool isHardSelected() const { return hard; }
+    bool noAi() const { return none; }
 
     bool threeSelected() const { return three; }
     bool fourSelected() const { return four; }
@@ -83,6 +91,8 @@ public:
     void reset() {
         game = false;
         unsetOpp();
+        unPressAi();
+        unPressSize();
     }
 
     void handleMouseClick(int button, int state, float x, float y) {
@@ -93,14 +103,17 @@ public:
         if(state == 0) {
             if(threeButton.isClicked(normX, normY)) {
                 unPressSize();
+                resetBoardSelec();
                 threeButton.setPressed(true);
                 three = true;
             } else if(fourButton.isClicked(normX, normY)) {
                 unPressSize();
+                resetBoardSelec();
                 fourButton.setPressed(true);
                 four = true;
             } else if(fiveButton.isClicked(normX, normY)) {
                 unPressSize();
+                resetBoardSelec();
                 fiveButton.setPressed(true);
                 five = true;
             }
@@ -114,6 +127,7 @@ public:
             }else if (humanButton.isClicked(normX, normY)){
                 unPressAi();
                 humanButton.setPressed(true);
+                none = true;
                 unsetOpp();
                 std::cout<<"No AI selected"<<std::endl;
             }else if(mediumAiButton.isClicked(normX, normY)){
