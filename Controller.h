@@ -33,12 +33,19 @@ public:
         if(!gameStarted && !gameEnded) {
             start.handleMouseClick(button, state, x, y);
             if(start.startGame()) {
-                if(start.threeSelected()) {
+                switch (start.amountS()) {
+                
+                case 3:
                     game.resizeBoard(3);
-                } else if(start.fourSelected()) {
+                    break;
+                case 4:
                     game.resizeBoard(4);
-                } else if(start.fiveSelected()) {
+                    break;
+                case 5:
                     game.resizeBoard(5);
+                    break;
+                default: std::cout<<"Errors, 3 x 3" <<std::endl;
+                game.resizeBoard(3);
                 }
 
                 if(start.isEasySelected()) {
