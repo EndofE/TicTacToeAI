@@ -151,68 +151,17 @@ void hardAI() {
     }
 }
 
-bool isBoardFull(const std::vector<std::vector<int>>& board) {
-    for (const auto& row : board) {
-        for (int cell : row) {
-            if (cell == 0) return false; // If there's an empty cell, the board is not full
-        }
-    }
-    return true; // All cells are filled, the board is full
-}
-
-// Function to handle player input
-std::pair<int, int> getPlayerMove(const std::vector<std::vector<int>>& board) {
-    int x, y;
-    while (true) {
-        std::cout << "Enter your move (row and column): ";
-        std::cin >> x >> y; // Prompt the player to enter row and column
-       
-        if (x >= 0 && x < 3 && y >= 0 && y < 3 && board[x][y] == 0) {
-            return {x, y}; // Return the valid move as a pair of coordinates
-        } else {
-            std::cout << "Invalid move. Try again." << std::endl; // Inform the player of invalid input
-        }
-    }
-}
-
 // Function to check if the game is over
 bool checkWin(const std::vector<std::vector<int>>& board, int player) {
-    int size = board.size(); // Determine the size of the board
+    int size = board.size();
    
-    // Check rows for a win
     for (int i = 0; i < size; ++i) {
-        if (board[i][0] == player && board[i][1] == player && board[i][2] == player) return true; // If all cells in the row are the same and match the player's number
-        if (board[0][i] == player && board[1][i] == player && board[2][i] == player) return true; // If all cells in the column are the same and match the player's number
+        if (board[i][0] == player && board[i][1] == player && board[i][2] == player) return true;
+        if (board[0][i] == player && board[1][i] == player && board[2][i] == player) return true;
     }
    
-    // Check diagonals for a win
-    if (board[0][0] == player && board[1][1] == player && board[2][2] == player) return true; // If all cells in the main diagonal are the same and match the player's number
-    if (board[0][2] == player && board[1][1] == player && board[2][0] == player) return true; // If all cells in the anti-diagonal are the same and match the player's number
+    if (board[0][0] == player && board[1][1] == player && board[2][2] == player) return true;
+    if (board[0][2] == player && board[1][1] == player && board[2][0] == player) return true;
    
-    return false; // No win found
-}
-
-// Function to check if the board is full
-bool isBoardFull(const std::vector<std::vector<int>>& board) {
-    for (const auto& row : board) {
-        for (int cell : row) {
-            if (cell == 0) return false; // If there's an empty cell, the board is not full
-        }
-    }
-    return true; // All cells are filled, the board is full
-}
-
-// Function to handle player input
-std::pair<int, int> getPlayerMove(const std::vector<std::vector<int>>& board) {
-    int x, y;
-    while (true) {
-        std::cout << "Enter your move (row and column): ";
-        std::cin >> x >> y; // Prompt the player to enter row and column
-       
-        if (x >= 0 && x < 3 && y >= 0 && y < 3 && board[x][y] == 0) {
-            return {x, y}; // Return the valid move as a pair of coordinates
-        } else {
-            std::cout << "Invalid move. Try again." << std::endl; // Inform the player of invalid input
-        }
-    }
+    return false;
 }
