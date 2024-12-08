@@ -4,6 +4,8 @@
 #include "Button.h"
 #include <iostream>
 #include <GL/freeglut.h>
+#include "Texture.h"
+#include <ctime>
 
 class StartScreen {
 private:
@@ -20,6 +22,10 @@ private:
     Button start;
     Button opp;
     Button bs;
+    Texture* randomize;
+    
+
+    int amount = 2;
 
     bool easy, medium, hard, none;
     bool three, four, five;
@@ -32,6 +38,7 @@ public:
         hard = false;
         none = false;
         game = false;
+        
 
         //start screen buttons
         titleButton = Button(0.0f, 0.60f, 1.00f, 0.2f, "Tic-Tac-Toe", false, false);
@@ -42,6 +49,7 @@ public:
         hardAiButton = Button(0.75f, 0.2f, 0.35f, 0.2f, "Hard", false, false);
         opp = Button(-0.7f, 0.17f, 0.35f, 0.2f, "Opponent:", false, false);
         bs = Button(-0.7f, -0.23f, 0.35f, 0.2f, "Board Size:", false, false);
+        randomize = new Texture(-0.55f,-0.5f, 0.2f, 0.2f, "./assets/dice.png");
 
         //gameboard size buttons
         threeButton = Button(-0.2f, -0.2f, 0.35f, 0.2f, "3 x 3", false, false);
@@ -63,6 +71,11 @@ public:
         hardAiButton.setPressed(false);
     }
 
+    int amountS() const {
+       
+        return amount;
+    }
+
     void unPressSize() {
         threeButton.setPressed(false);
         fourButton.setPressed(false);
@@ -79,6 +92,7 @@ public:
     bool isMediumSelected() const { return medium; }
     bool isHardSelected() const { return hard; }
     bool noAi() const { return none; }
+    
 
     bool threeSelected() const { return three; }
     bool fourSelected() const { return four; }
@@ -101,21 +115,169 @@ public:
         float normY = 1.0f - (2.0f * (y / glutGet(GLUT_WINDOW_HEIGHT)));
         
         if(state == 0) {
+            if(randomize->contains(normX, normY)){
+                unsigned tSeed; //time-based seed
+                tSeed = time(0);
+                srand(tSeed);
+                int randAI;
+                int randBoard;
+                randAI = (rand() % 3 + 1);
+                randBoard = (rand() % 3 + 1);
+                switch (randAI){
+                    case 1: switch (randBoard) {
+                        case 1: easyAiButton.isClicked(normX, normY);
+                        unPressAi();
+                easyAiButton.setPressed(true);
+                unsetOpp();
+                easy = true;
+                std::cout<<"Easy AI selected"<<std::endl;
+                        threeButton.isClicked(normX, normY);
+                        unPressSize();
+                resetBoardSelec();
+                threeButton.setPressed(true);
+                three = true;
+                amount = 3;
+                        startButton.isClicked(normX, normY);
+                        break;
+                        case 2: easyAiButton.isClicked(normX, normY);
+                        unPressAi();
+                easyAiButton.setPressed(true);
+                unsetOpp();
+                easy = true;
+                std::cout<<"Easy AI selected"<<std::endl;
+                        fourButton.isClicked(normX, normY);
+                        unPressSize();
+                resetBoardSelec();
+                fourButton.setPressed(true);
+                four = true;
+                amount = 4;
+                        startButton.isClicked(normX, normY);
+                        break;
+                        case 3: easyAiButton.isClicked(normX, normY);
+                        unPressAi();
+                easyAiButton.setPressed(true);
+                unsetOpp();
+                easy = true;
+                std::cout<<"Easy AI selected"<<std::endl;
+                        fiveButton.isClicked(normX, normY);
+                        unPressSize();
+                resetBoardSelec();
+                fiveButton.setPressed(true);
+                five = true;
+                amount = 5;
+                        startButton.isClicked(normX, normY);
+                        break;
+                    } break;
+                    case 2: switch (randBoard) {
+                        case 1: mediumAiButton.isClicked(normX, normY);
+                        unPressAi();
+                mediumAiButton.setPressed(true);
+                unsetOpp();
+                medium = true;
+                std::cout<<"Medium AI selected"<<std::endl;
+                        threeButton.isClicked(normX, normY);
+                        unPressSize();
+                resetBoardSelec();
+                threeButton.setPressed(true);
+                three = true;
+                amount = 3;
+                        startButton.isClicked(normX, normY);
+                        break;
+                        case 2: mediumAiButton.isClicked(normX, normY);
+                        unPressAi();
+                mediumAiButton.setPressed(true);
+                unsetOpp();
+                medium = true;
+                std::cout<<"Medium AI selected"<<std::endl;
+                        fourButton.isClicked(normX, normY);
+                        unPressSize();
+                resetBoardSelec();
+                fourButton.setPressed(true);
+                four = true;
+                amount = 4;
+                        startButton.isClicked(normX, normY);
+                        break;
+                        case 3: mediumAiButton.isClicked(normX, normY);
+                        unPressAi();
+                mediumAiButton.setPressed(true);
+                unsetOpp();
+                medium = true;
+                std::cout<<"Medium AI selected"<<std::endl;
+                        fiveButton.isClicked(normX, normY);
+                        unPressSize();
+                resetBoardSelec();
+                fiveButton.setPressed(true);
+                five = true;
+                amount = 5;
+                        startButton.isClicked(normX, normY);
+                        break;
+                    } break;
+                    case 3: switch (randBoard) {
+                        case 1: hardAiButton.isClicked(normX, normY);
+                        unPressAi();
+                hardAiButton.setPressed(true);
+                unsetOpp();
+                hard = true;
+                std::cout<<"Hard AI selected"<<std::endl;
+                        threeButton.isClicked(normX, normY);
+                        unPressSize();
+                resetBoardSelec();
+                threeButton.setPressed(true);
+                three = true;
+                amount = 3;
+                        startButton.isClicked(normX, normY);
+                        break;
+                        case 2: hardAiButton.isClicked(normX, normY);
+                        unPressAi();
+                hardAiButton.setPressed(true);
+                unsetOpp();
+                hard = true;
+                std::cout<<"Hard AI selected"<<std::endl;
+                        fourButton.isClicked(normX, normY);
+                        unPressSize();
+                resetBoardSelec();
+                fourButton.setPressed(true);
+                four = true;
+                amount = 4;
+                        startButton.isClicked(normX, normY);
+                        break;
+                        case 3: hardAiButton.isClicked(normX, normY);
+                        unPressAi();
+                hardAiButton.setPressed(true);
+                unsetOpp();
+                hard = true;
+                std::cout<<"Hard AI selected"<<std::endl;
+                        fiveButton.isClicked(normX, normY);
+                        unPressSize();
+                resetBoardSelec();
+                fiveButton.setPressed(true);
+                five = true;
+                amount = 5;
+                        startButton.isClicked(normX, normY);
+                        break;
+                        default: std::cout << "no randomization" <<std::endl;
+                    } break;
+                    default: std::cout << "no randomization" <<std::endl;
+                } 
+            }
             if(threeButton.isClicked(normX, normY)) {
                 unPressSize();
                 resetBoardSelec();
                 threeButton.setPressed(true);
                 three = true;
+                amount = 3;
             } else if(fourButton.isClicked(normX, normY)) {
                 unPressSize();
                 resetBoardSelec();
                 fourButton.setPressed(true);
                 four = true;
+                amount = 4;
             } else if(fiveButton.isClicked(normX, normY)) {
                 unPressSize();
                 resetBoardSelec();
                 fiveButton.setPressed(true);
                 five = true;
+                amount = 5;
             }
 
             if(easyAiButton.isClicked(normX, normY)){
@@ -165,6 +327,7 @@ public:
         hardAiButton.draw();
         opp.draw2();
         bs.draw2();
+        randomize->draw();
 
         glutSwapBuffers();
     }
